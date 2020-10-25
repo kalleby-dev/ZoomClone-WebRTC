@@ -1,7 +1,12 @@
 const express = require('express');
-/* const server = require('http').Server(app);
-const io = require('socket.io')(server); */
+
 const app = express();
+const server = app.listen(process.env.PORT || 3030, () => {
+  console.info('Running on port 3030 or Default');
+});
+
+const io = require('socket.io').listen(server);
+
 const { v4: uuidV4 } = require('uuid');
 
 app.set('view engine', 'ejs');
@@ -15,6 +20,9 @@ app.get('/:room', (req, res) => {
   res.render('room', { roomId: req.params.room });
 });
 
-app.listen(process.env.PORT || 3030, () => {
-  console.info('Running on port 3030 or Default');
+io.on('connection', (socket) => {
+  socket.on('join-room', () => {
+    socket.emit('response');
+    console.log('Joined room');
+  });
 });

@@ -1,4 +1,5 @@
 let roomID;
+const socket = io('/');
 const myVideo = document.createElement('video');
 const videoGrid = document.querySelector('.video-grid');
 
@@ -6,6 +7,14 @@ const midiaConstraints = {
   video: true,
   audio: true,
 };
+
+socket.emit('join-room');
+
+// Only for tests
+socket.on('response', () => {
+  console.log('Respondido');
+});
+// -------------
 
 // Creates a new video element and load the data stream
 const addVideoStream = (stream, element) => {

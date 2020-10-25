@@ -1,9 +1,13 @@
-const app = require('express')();
+const express = require('express');
 /* const server = require('http').Server(app);
 const io = require('socket.io')(server); */
+const app = express();
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('HelloWorld');
+  res.render('room');
 });
 
 app.listen(process.env.PORT || 3030, () => {

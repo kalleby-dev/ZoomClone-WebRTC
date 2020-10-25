@@ -1,1 +1,2 @@
-console.log('Bem vindo');
+// eslint-disable-next-line no-undef
+console.log(ROOMID);

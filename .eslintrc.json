@@ -13,7 +13,8 @@
     "rules": {
         "new-cap": ["off"],
         "comma-dangle": ["warn", "always-multiline"],
-        "no-console": ["off"]
+        "no-console": ["off"],
+        "no-unused-vars": ["warn"]
     }
 }
 

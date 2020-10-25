@@ -1,0 +1,33 @@
+{
+  "name": "zoom-clone",
+  "version": "0.0.1",
+  "description": "Simple Web chat using WebRTC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "nodemon ./server.js",
+    "start": "node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalleby-dev/ZoomClone-WebRTC.git"
+  },
+  "keywords": [
+    "zoom"
+  ],
+  "author": "Kalleby Santos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kalleby-dev/ZoomClone-WebRTC/issues"
+  },
+  "homepage": "https://github.com/kalleby-dev/ZoomClone-WebRTC#readme",
+  "devDependencies": {
+    "eslint": "^7.12.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

@@ -1,4 +1,3 @@
-let roomID;
 const socket = io('/');
 const myVideo = document.createElement('video');
 const videoGrid = document.querySelector('.video-grid');
@@ -7,8 +6,6 @@ const midiaConstraints = {
   video: true,
   audio: true,
 };
-
-socket.emit('join-room');
 
 // Only for tests
 socket.on('response', () => {
@@ -33,8 +30,16 @@ const streaming = () => {
     });
 };
 
+const connectToNewUser = () => {
+  console.log('New connection');
+};
+
 function start(room) {
-  roomID = room;
-  console.log(roomID);
+  const id = room;
+  socket.emit('join-room', { id });
+
+  socket.on('user-connected', () => {
+    connectToNewUser();
+  });
   streaming();
 }

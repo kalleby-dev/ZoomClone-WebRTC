@@ -1,4 +1,5 @@
 const socket = io('/');
+const room = ROOMID;
 const myVideo = document.createElement('video');
 const videoGrid = document.querySelector('.video-grid');
 const midiaConstraints = {
@@ -7,6 +8,7 @@ const midiaConstraints = {
 };
 
 let myUserID;
+let myStream;
 const myPeer = new Peer(undefined, {
   path: '/peerjs',
   host: '/',
@@ -25,24 +27,43 @@ const addVideoStream = (stream, element) => {
   videoGrid.append(video);
 };
 
+const connectToNewUser = (remoteUser, localStream) => {
+  const call = myPeer.call(remoteUser, localStream);
+  console.log(call);
+  const video = document.createElement('video');
+
+  call.on('stream', (remoteStream) => {
+    addVideoStream(remoteStream, video);
+  });
+};
+
+socket.on('user-connected', (data) => {
+  connectToNewUser(data.user, myStream);
+});
+
+navigator.mediaDevices.getUserMedia(midiaConstraints)
+  .then((stream) => {
+    myStream = stream;
+    myVideo.muted = true;
+    addVideoStream(myStream, myVideo);
+
+    socket.emit('join-room', { room, user: myUserID });
+
+    myPeer.on('call', (call) => {
+      call.answer(myStream);
+      console.log(call);
+      const video = document.createElement('video');
+
+      call.on('stream', (remoteStream) => {
+        addVideoStream(remoteStream, video);
+      });
+    });
+  });
+
 // Receives user stream data inputs
 const streaming = () => {
-  navigator.mediaDevices.getUserMedia(midiaConstraints)
-    .then((myStream) => {
-      myVideo.muted = true;
-      addVideoStream(myStream, myVideo);
-    });
 };
 
-const connectToNewUser = (userId) => {
-  console.log('New user: ', userId);
-};
-
-function start(room) {
-  socket.emit('join-room', { room, user: myUserID });
-
-  socket.on('user-connected', (data) => {
-    connectToNewUser(data.user);
-  });
+function start() {
   streaming();
 }

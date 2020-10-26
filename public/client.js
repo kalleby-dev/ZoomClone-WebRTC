@@ -1,17 +1,21 @@
 const socket = io('/');
 const myVideo = document.createElement('video');
 const videoGrid = document.querySelector('.video-grid');
-
 const midiaConstraints = {
   video: true,
   audio: true,
 };
 
-// Only for tests
-socket.on('response', () => {
-  console.log('Respondido');
+let myUserID;
+const myPeer = new Peer(undefined, {
+  path: '/peerjs',
+  host: '/',
+  port: '3030',
 });
-// -------------
+
+myPeer.on('open', (id) => {
+  myUserID = id;
+});
 
 // Creates a new video element and load the data stream
 const addVideoStream = (stream, element) => {
@@ -30,16 +34,15 @@ const streaming = () => {
     });
 };
 
-const connectToNewUser = () => {
-  console.log('New connection');
+const connectToNewUser = (userId) => {
+  console.log('New user: ', userId);
 };
 
 function start(room) {
-  const id = room;
-  socket.emit('join-room', { id });
+  socket.emit('join-room', { room, user: myUserID });
 
-  socket.on('user-connected', () => {
-    connectToNewUser();
+  socket.on('user-connected', (data) => {
+    connectToNewUser(data.user);
   });
   streaming();
 }
